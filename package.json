@@ -43,6 +43,6 @@
 		"vitest-browser-svelte": "^2.0.2"
 	},
 	"dependencies": {
-		"@iarna/toml": "^2.2.5"
+		"smol-toml": "^1.6.0"
 	}
 }

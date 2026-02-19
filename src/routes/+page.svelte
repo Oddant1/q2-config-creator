@@ -1,14 +1,20 @@
 <script lang="ts">
+	import { stringify } from 'smol-toml';
+
 	async function getConfig(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
 		event.preventDefault();
 
-		const data = new FormData(event.currentTarget, event.submitter);
-		const response = await fetch(event.currentTarget.action, {
-			method: 'POST',
-			body: data
-		});
+		const json = {
+			'parsl': {'strategy': 'None'}
+		}
+		const data = new FormData(event.currentTarget);
 
-		const blob: Blob = await response.blob();
+		json.parsl.pcType = data.get('pcType');
+		json.parsl.num = 1
+
+		const tomlString = stringify(json);
+
+		const blob: Blob = new Blob([tomlString]);
 		const blobUrl = URL.createObjectURL(blob);
 		const link = document.createElement('a');
 
@@ -37,7 +43,7 @@ QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARS
 library under the hood. This is particularly useful for pipelines in MOSHPIT and q2-boots which
 often do the same type of calculation a very large number of times on a large set of data.
 
-<form method="POST" onsubmit={getConfig}>
+<form onsubmit={getConfig}>
 	<label for="pcType">What type of computer are you using?</label>
 	<select name="pcType">
 		<option value="HPC">HPC</option>
