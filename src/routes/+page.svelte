@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { parse, stringify } from 'smol-toml';
+    import DropZone from '$lib/components/DropZone.svelte';
+import { parse, stringify } from 'smol-toml';
 
     const json = $state({'parsl': {}});
 
@@ -50,25 +51,9 @@
 </p>
 <br />
 
-<!-- I couldn"t find a good answer for what ARIA role to give this, but the
-  linter told me I needed one -->
-<div
-  id="dropzone"
-  class:isDragging
-  class:isSelected
-  ondragover={onDragOver}
-  ondragleave={onDragLeave}
-  ondrop={onDrop}
-  role="button"
-  tabindex="0"
->
-  <input id="dropinput" bind:files onchange={(event) => fileChange(event)} type="file" accept=".qza, .qzv"/>
-  <div class="text-xl text-gray-700 text-center">
-    <h1 class="mt-2.5 mb-1 text-4xl">Drag and drop or click here</h1>
-    to view a QIIME 2 Artifact or Visualization (.qza/.qzv) from your computer.
-  </div>
-</div>
+<DropZone />
 
+<!-- TODO: Disable this in some way while parsing a user input file (shouldn't take long) -->
 <form onsubmit={getConfig}>
     <label for="max_blocks">
         How many slurm jobs would you like to run concurrently. Note this is the maximum
@@ -135,36 +120,3 @@ Is the action you are running threadsafe? If you don't know the answer to this, 
 do you have?
 <!-- ... -->
 <!-- </form> -->
-
-<style lang="postcss">
-  #dropzone {
-    box-shadow: rgb(153, 153, 153) 5px 5px 5px;
-    @apply relative
-      border-4
-      border-dashed
-      border-gray-300
-      rounded-lg
-      w-full
-      p-12
-      bg-gray-100
-      mb-4;
-  }
-
-  #dropzone.isDragging {
-    @apply border-solid
-      shadow-inner
-      font-bold;
-  }
-
-  #dropinput {
-    @apply cursor-pointer
-      opacity-0
-      absolute
-      top-0
-      right-0
-      bottom-0
-      left-0
-      w-full
-      h-full;
-  }
-</style>
