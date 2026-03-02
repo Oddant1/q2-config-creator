@@ -1,6 +1,27 @@
-import { parse } from 'smol-toml';
+import { stringify, parse } from 'smol-toml';
+
+// TODO: We need acceptable toml key paths here. We need to verify anything
+// under "parsl" in the toml is in the acceptable paths
 
 class FormModel {
+    configType = "local";
+    formData = {
+        "local": {
+            "localExecutorType": "HighThroughputExecutor",
+            "numTasks": ""
+        },
+        "slurm": {
+            "maxBlocks": "",
+            "walltime": "",
+            "nodesPerBlock": "",
+            "workersPerNode": "",
+            "cpusPerNode": "",
+            "cpusPerWorker": "",
+            "memPerNode": "",
+            "workerInit": ""
+        }
+    };
+
   //***************************************************************************
   // Start boilerplate to make this a subscribable svelte store
   //***************************************************************************
@@ -26,7 +47,7 @@ class FormModel {
   // End boilerplate to make this a subscribable svelte store
   //***************************************************************************
 
-  async readData(src: File) {
+  async readConfig(src: File) {
     const reader = new FileReader();
 
     reader.onerror = () => {
@@ -36,6 +57,7 @@ class FormModel {
     reader.onload = () => {
         let config = parse(reader.result as string);
         console.log(config)
+        console.log(stringify(config))
     }
 
     reader.readAsText(src);

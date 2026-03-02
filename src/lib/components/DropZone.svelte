@@ -41,7 +41,7 @@
             } else if (files.length > 1) {
                 alert("Please only provide a single file.");
             } else {
-                formModel.readData(files[0]);
+                formModel.readConfig(files[0]);
             }
         }
     });
