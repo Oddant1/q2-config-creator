@@ -1,56 +1,102 @@
 <script lang="ts">
-	import { stringify } from 'smol-toml';
+    import { parse, stringify } from 'smol-toml';
 
-	async function getConfig(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
-		event.preventDefault();
+    const json = $state({'parsl': {}});
 
-		const json = {
-			'parsl': {'strategy': 'None'}
-		}
-		const data = new FormData(event.currentTarget);
+    async function getConfig(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
 
-		json.parsl.pcType = data.get('pcType');
-		json.parsl.num = 1
+        json.parsl.pcType = data.get('pcType');
+        json.parsl.num = 1
 
-		const tomlString = stringify(json);
+        const tomlString = stringify(json);
 
-		const blob: Blob = new Blob([tomlString]);
-		const blobUrl = URL.createObjectURL(blob);
-		const link = document.createElement('a');
+        const blob: Blob = new Blob([tomlString]);
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
 
-		link.href = blobUrl;
-		link.download = 'parallelConfig.toml';
+        link.href = blobUrl;
+        link.download = 'parallelConfig.toml';
 
-		document.body.appendChild(link);
+        document.body.appendChild(link);
 
-		link.dispatchEvent(
-			new MouseEvent('click', {
-				bubbles: true,
-				cancelable: true,
-				view: window
-			})
-		);
+        link.dispatchEvent(
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            })
+        );
 
-		document.body.removeChild(link);
-		URL.revokeObjectURL(blobUrl);
-	}
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+    }
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<p>
+    QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARSL parallel scripting library under the
+    hood. Running small workflows in parallel on a laptop requires minimal configuration, and can be achieved by simply passing
+    the --p-parallel flag to the pipeline you are running without additional configuration; however, QIIME 2 also support
+    parallelizing large scale workflows across multiple nodes on a compute cluster. This is particularly useful for pipelines
+    in MOSHPIT and q2-boots which often do the same type of calculation a very large number of times on a large set of data.
+</p>
+<br />
+<p>
+    This webapp can help you create a file to pass into the --p-parallel-config parameter og a QIIME 2 Pipeline you want to
+    run in parallel on an HPC cluster using the slurm scheduler. PARSL and thus QIIME 2 do support schedulers other than slurm,
+    but this app currently only supports creating slurm configs. More information about QIIME 2 parallel configuration may be
+    found <a class="underline text-blue-600" href="https://use.qiime2.org/en/stable/references/parallel-configuration.html" target="_blank">here</a>.
+</p>
+<br />
 
-QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARSL parallel scripting
-library under the hood. This is particularly useful for pipelines in MOSHPIT and q2-boots which
-often do the same type of calculation a very large number of times on a large set of data.
+<!-- I couldn"t find a good answer for what ARIA role to give this, but the
+  linter told me I needed one -->
+<div
+  id="dropzone"
+  class:isDragging
+  class:isSelected
+  ondragover={onDragOver}
+  ondragleave={onDragLeave}
+  ondrop={onDrop}
+  role="button"
+  tabindex="0"
+>
+  <input id="dropinput" bind:files onchange={(event) => fileChange(event)} type="file" accept=".qza, .qzv"/>
+  <div class="text-xl text-gray-700 text-center">
+    <h1 class="mt-2.5 mb-1 text-4xl">Drag and drop or click here</h1>
+    to view a QIIME 2 Artifact or Visualization (.qza/.qzv) from your computer.
+  </div>
+</div>
 
 <form onsubmit={getConfig}>
-	<label for="pcType">What type of computer are you using?</label>
-	<select name="pcType">
-		<option value="HPC">HPC</option>
-		<option value="local">local</option>
-	</select>
-	<br /><br />
-	<button>Generate Config</button>
+    <label for="max_blocks">
+        How many slurm jobs would you like to run concurrently. Note this is the maximum
+        number of jobs that could be running simultaneously. There is no guarantee this
+        many will be running at all times.
+    </label>
+    <input type="number" min="1">
+
+    <label for="pcType">What type of computer are you using?</label>
+    <select id="pcType" name="pcType" bind:value={json.parsl.pcType}>
+        <option value="HPC">HPC</option>
+        <option value="local">local</option>
+    </select>
+    {#if json.parsl.pcType == "local"}
+        <label for="thing1">Is the action you are</label>
+        <select id="thing1" name="thing1" bind:value={json.parsl.thing1}>
+            <option value="HPC">HPC</option>
+            <option value="local">local</option>
+        </select>
+    {:else}
+        <label for="thing2">Is the action you are</label>
+        <select id="thing2" name="thing2" bind:value={json.parsl.thing2}>
+            <option value="HPC">HPC</option>
+            <option value="local">local</option>
+        </select>
+    {/if}
+    <br /><br />
+    <button>Generate Config</button>
 </form>
 
 <!-- For creating the actual action submission? -->
@@ -89,3 +135,36 @@ Is the action you are running threadsafe? If you don't know the answer to this, 
 do you have?
 <!-- ... -->
 <!-- </form> -->
+
+<style lang="postcss">
+  #dropzone {
+    box-shadow: rgb(153, 153, 153) 5px 5px 5px;
+    @apply relative
+      border-4
+      border-dashed
+      border-gray-300
+      rounded-lg
+      w-full
+      p-12
+      bg-gray-100
+      mb-4;
+  }
+
+  #dropzone.isDragging {
+    @apply border-solid
+      shadow-inner
+      font-bold;
+  }
+
+  #dropinput {
+    @apply cursor-pointer
+      opacity-0
+      absolute
+      top-0
+      right-0
+      bottom-0
+      left-0
+      w-full
+      h-full;
+  }
+</style>
