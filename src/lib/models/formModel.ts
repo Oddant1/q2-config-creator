@@ -1,4 +1,4 @@
-import { stringify, parse } from 'smol-toml';
+import { parse } from 'smol-toml';
 
 // TODO: We need acceptable toml key paths here. We need to verify anything
 // under "parsl" in the toml is in the acceptable paths
