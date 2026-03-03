@@ -73,7 +73,7 @@
         const executor = jsonConfig.parsl.executors[0];
         executor['class'] = 'HighThroughputExecutor';
         executor['cores_per_worker'] = formModel.formData.slurm.cpusPerWorker;
-        executor['max_worker_per_node'] = formModel.formData.slurm.workersPerNode;
+        executor['max_workers_per_node'] = formModel.formData.slurm.workersPerNode;
 
         executor['provider'] = {
             'class': 'SlurmProvider',
@@ -109,49 +109,51 @@
 
 <!-- TODO: Disable this in some way while parsing a user input file (shouldn't take long) -->
 <form onsubmit={writeConfig}>
-    <label for="pcType">What type of computer are you using?</label>
-    <select id="pcType" name="pcType" bind:value={formModel.configType}>
-        <option value="local">local</option>
-        <option value="slurm">slurm</option>
-    </select>
-    <br/>
-    {#if formModel.configType == "local"}
-        <label for="localExecutorType">Is the action you are running threadsafe? (If you don't know choose no.)</label>
-        <select id="localExecutorType" name="localExecutorType" bind:value={formModel.formData.local.localExecutorType}>
-            <option value="HighThroughputExecutor">No</option>
-            <option value="ThreadpoolExecutor">Yes</option>
+    {#key $formModel.configType}
+        <label for="pcType">What type of computer are you using?</label>
+        <select id="pcType" name="pcType" bind:value={formModel.configType}>
+            <option value="local">local</option>
+            <option value="slurm">slurm</option>
         </select>
         <br/>
-        <label for="numTasks">How many threads/processes would you like to run Note: More threads/processes means more memory usage</label>
-        <input id="numTasks" bind:value={formModel.formData.local.numTasks} type="number" min="1" pattern="\d*" required>
-    {:else}
-        <label for="maxBlocks">How many Slurm jobs do you want to submit?</label>
-        <input id="maxBlocks" bind:value={formModel.formData.slurm.maxBlocks} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="walltime">What would you like the walltime for your Slurm jobs (maximum runtime of each job) to be in HH:MM:SS?</label>
-        <input id="walltime" bind:value={formModel.formData.slurm.walltime} pattern="\d*:\d\d:\d\d" placeholder="HH:MM:SS" required>
-        <br/>
-        <label for="nodesPerBlock">How many nodes do you want per slurm job?</label>
-        <input id="nodesPerBlock" bind:value={formModel.formData.slurm.nodesPerBlock} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="workersPerNode">How many tasks do you want running simultaneously per node?</label>
-        <input id="workerPerNode" bind:value={formModel.formData.slurm.workersPerNode} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="cpusPerNode">How many CPUSs do you want per node?</label>
-        <input id="cpusPerNode" bind:value={formModel.formData.slurm.cpusPerNode} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="cpusPerWorker">How many CPUSs do you want per task?</label>
-        <input id="cpusPerWorker" bind:value={formModel.formData.slurm.cpusPerWorker} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="memPerNode">How much RAM do you want per node in GB?</label>
-        <input id="memPerNode" bind:value={formModel.formData.slurm.memPerNode} type="number" min="1" pattern="\d*" required>
-        <br/>
-        <label for="workerInit">What command(s) do you need to run to activate QIIME 2? If there are multiple commands please seperate them with ;</label>
-        <input id="workerInit" bind:value={formModel.formData.slurm.workerInit} placeholder="module load anaconda3; conda activate qiime2-amplicon-dev;" required>
-        <br/>
-    {/if}
-    <br /><br />
-    <button>Generate Config</button>
+        {#if formModel.configType == "local"}
+            <label for="localExecutorType">Is the action you are running threadsafe? (If you don't know choose no.)</label>
+            <select id="localExecutorType" name="localExecutorType" bind:value={formModel.formData.local.localExecutorType}>
+                <option value="HighThroughputExecutor">No</option>
+                <option value="ThreadpoolExecutor">Yes</option>
+            </select>
+            <br/>
+            <label for="numTasks">How many threads/processes would you like to run Note: More threads/processes means more memory usage</label>
+            <input id="numTasks" bind:value={formModel.formData.local.numTasks} type="number" min="1" pattern="\d*" required>
+        {:else}
+            <label for="maxBlocks">How many Slurm jobs do you want to submit?</label>
+            <input id="maxBlocks" bind:value={formModel.formData.slurm.maxBlocks} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="walltime">What would you like the walltime for your Slurm jobs (maximum runtime of each job) to be in HH:MM:SS?</label>
+            <input id="walltime" bind:value={formModel.formData.slurm.walltime} pattern="\d*:\d\d:\d\d" placeholder="HH:MM:SS" required>
+            <br/>
+            <label for="nodesPerBlock">How many nodes do you want per slurm job?</label>
+            <input id="nodesPerBlock" bind:value={formModel.formData.slurm.nodesPerBlock} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="workersPerNode">How many tasks do you want running simultaneously per node?</label>
+            <input id="workerPerNode" bind:value={formModel.formData.slurm.workersPerNode} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="cpusPerNode">How many CPUSs do you want per node?</label>
+            <input id="cpusPerNode" bind:value={formModel.formData.slurm.cpusPerNode} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="cpusPerWorker">How many CPUSs do you want per task?</label>
+            <input id="cpusPerWorker" bind:value={formModel.formData.slurm.cpusPerWorker} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="memPerNode">How much RAM do you want per node in GB?</label>
+            <input id="memPerNode" bind:value={formModel.formData.slurm.memPerNode} type="number" min="1" pattern="\d*" required>
+            <br/>
+            <label for="workerInit">What command(s) do you need to run to activate QIIME 2? If there are multiple commands please seperate them with ;</label>
+            <input id="workerInit" bind:value={formModel.formData.slurm.workerInit} placeholder="module load anaconda3; conda activate qiime2-amplicon-dev;" required>
+            <br/>
+        {/if}
+        <br /><br />
+        <button>Generate Config</button>
+    {/key}
 </form>
 
 <!-- For creating the actual action submission? -->

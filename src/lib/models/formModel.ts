@@ -47,7 +47,28 @@ class FormModel {
   // End boilerplate to make this a subscribable svelte store
   //***************************************************************************
 
+  clear() {
+    this.configType = "local";
+    this.formData = {
+        "local": {
+            "localExecutorType": "HighThroughputExecutor",
+            "numTasks": ""
+        },
+        "slurm": {
+            "maxBlocks": "",
+            "walltime": "",
+            "nodesPerBlock": "",
+            "workersPerNode": "",
+            "cpusPerNode": "",
+            "cpusPerWorker": "",
+            "memPerNode": "",
+            "workerInit": ""
+        }
+    };
+  }
+
   async readConfig(src: File) {
+    this.clear();
     const reader = new FileReader();
 
     reader.onerror = () => {
@@ -56,8 +77,35 @@ class FormModel {
 
     reader.onload = () => {
         let config = parse(reader.result as string);
-        console.log(config)
-        console.log(stringify(config))
+        if (!config.parsl) {
+            // TODO: Complain
+        } else {
+            // TODO: Make sure only one executor for now
+            const executor = config.parsl.executors[0];
+
+            // TODO: Validate fields properly
+            if (!executor.provider || executor.provider.class === "LocalProvider") {
+                this.configType = "local";
+                this.formData.local.localExecutorType = executor.class;
+                this.formData.local.numTasks = executor.class === "HighThroughputExecutor" ? executor.max_workers : executor.max_threads;
+            } else if (executor.provider.class === "SlurmProvider") {
+                this.configType = "slurm"
+                this.formData.slurm.cpusPerWorker = executor.cores_per_worker ? executor.cores_per_worker : "";
+                this.formData.slurm.workersPerNode = executor.max_workers_per_node ? executor.max_workers_per_node : "";
+
+                const provider = executor.provider;
+                this.formData.slurm.cpusPerNode = provider.cores_per_node ? provider.cores_per_node : "";
+                this.formData.slurm.maxBlocks = provider.max_blocks ? provider.max_blocks : "";
+                this.formData.slurm.memPerNode = provider.mem_per_node ? provider.mem_per_node : "";
+                this.formData.slurm.nodesPerBlock = provider.nodes_per_block ? provider.nodes_per_block : "";
+                this.formData.slurm.walltime = provider.walltime ? provider.walltime : "";
+                this.formData.slurm.workerInit = provider.worker_init ? provider.worker_init : "";
+            } else {
+                // TODO: Complain
+            }
+
+            this._dirty();
+        }
     }
 
     reader.readAsText(src);
