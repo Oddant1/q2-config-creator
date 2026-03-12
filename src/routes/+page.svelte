@@ -3,6 +3,7 @@
 
     import DropZone from '$lib/components/DropZone.svelte';
     import formModel from '$lib/models/formModel';
+	import NavBanner from '$lib/components/NavBanner.svelte';
 
     async function writeConfig(event: SubmitEvent) {
         event.preventDefault();
@@ -91,28 +92,12 @@
 
 <div class="min-h-screen bg-white text-black">
     <header class="fixed left-0 right-0 top-0 z-10">
-        <div class="h-[30px] bg-[#1a414c] text-white">
-            <div class="max-width flex h-full items-center text-[14px] font-bold">
-                <a class="header-link" href="https://qiime2.org" target="_blank" rel="noreferrer">QIIME 2</a>
-                <nav class="ml-auto flex items-center gap-6 font-normal">
-                    <a class="header-link" href="https://library.qiime2.org" target="_blank" rel="noreferrer">Library</a>
-                    <a class="header-link" href="https://view.qiime2.org" target="_blank" rel="noreferrer">View</a>
-                    <a class="header-link" href="https://forum.qiime2.org" target="_blank" rel="noreferrer">Forum</a>
-                </nav>
-            </div>
-        </div>
-        <div class="h-12 bg-[#fcfcfc] text-[#636363] shadow-[0_1px_5px_rgb(153,153,153)]">
-            <div class="max-width flex h-full items-center gap-3">
-                <div class="flex h-7 w-7 items-center justify-center rounded bg-[#1a414c] text-[10px] font-semibold text-white">
-                    Q2
-                </div>
-                <span class="text-sm font-semibold text-black">QIIME 2 View</span>
-                <span class="text-sm">Parallel Config Creator</span>
-            </div>
-        </div>
+        <NavBanner />
     </header>
-
-    <main class="pt-[110px]">
+    <div class="pt-20 max-width flex h-full items-center gap-3">
+        <span class="text-4xl mx-auto font-bold text-black">QIIME 2 Parallel Config Creator</span>
+    </div>
+    <main class="pt-10">
         <div class="max-width">
             <p class="pb-4">
                 QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARSL parallel scripting library
