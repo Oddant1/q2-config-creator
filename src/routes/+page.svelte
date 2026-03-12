@@ -297,7 +297,7 @@
 							<p class="text-xs text-gray-500">
 								Your config will download as `parallelConfig.toml`.
 							</p>
-							<button class="roundButton" type="submit">Generate config</button>
+                            <button class="gallery-button" type="submit">Generate Config</button>
 						</div>
 					{/key}
 				</form>
