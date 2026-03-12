@@ -40,3 +40,53 @@
     @apply text-blue-800;
   }
 }
+
+@layer utilities {
+  .max-width {
+    max-width: calc(1110px + 17em);
+    margin: 0 auto;
+    padding: 0 0.67em;
+    font-size: initial;
+  }
+}
+
+@layer components {
+  .roundInput {
+    @apply border
+    border-solid
+    rounded
+    border-gray-300
+    mr-auto
+    mt-auto
+    pl-2
+    mb-4
+    h-9;
+  }
+
+  .roundButton {
+    @apply p-2
+    rounded-md
+    border
+    border-gray-300
+    bg-white
+    text-sm
+    font-semibold
+    text-gray-800;
+  }
+
+  .roundButton:hover {
+    @apply bg-gray-200;
+  }
+
+  .header-link:link,
+  .header-link:visited {
+    color: white;
+    text-decoration: none;
+  }
+
+  .header-link:hover,
+  .header-link:active {
+    color: white;
+    text-decoration: underline;
+  }
+}
