@@ -97,7 +97,7 @@
 	<div class="max-width flex h-full items-center gap-3 pt-20">
 		<span class="mx-auto text-4xl font-bold text-black">QIIME 2 Parallel Config Creator</span>
 	</div>
-	<main class="pt-10">
+	<main class="pt-10 pb-12">
 		<div class="max-width">
 			<p class="pb-4">
 				QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARSL parallel
