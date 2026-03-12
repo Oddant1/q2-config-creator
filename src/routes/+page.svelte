@@ -305,39 +305,3 @@
 		</div>
 	</main>
 </div>
-
-<!-- For creating the actual action submission? -->
-<!-- <form> -->
-<!-- Set this to cores_per_block / workers_per_block -->
-<!-- Does your action have a --p-threads param? -->
-<!-- Set this to same as max-blocks -->
-<!-- Does your action have a --p-partitions param? -->
-<!-- </form> -->
-
-<!-- For creating the parallel config -->
-<!-- <form> -->
-<!-- Are you running on an hpc? Y/N -->
-<!-- Y -->
-<!-- Are you using slurm? Y/N -->
-<!-- Y -->
-<!-- Sets max_blocks -->
-<!-- How many slurm jobs do you want to submit? -->
-<!-- Sets nodes_per_block -->
-<!-- How many nodes do you want each job to use? -->
-<!-- Sets cores_per_node -->
-<!-- How many CPUs do you want per node? NOTE: If the action you are running has a parallel param you will
-want to set it such that it actually uses all CPUs. In general, this can be accomplished by setting the
-parallel parameter to the action to cores_per_worker / workers_per_node -->
-<!-- Sets mem_per_node -->
-<!-- How much memory in GB do you want per node? -->
-<!-- Sets walltime -->
-<!-- How long do you expect the job to take? -->
-<!-- Sets the worker_init -->
-<!-- What commands do you need to run to activate your QIIME 2 environment? These commands will be run on the
-compute node(s) to activate QIIME 2 -->
-<!-- N -->
-<!-- Currently only supports detailed support for slurm -->
-<!-- N -->
-<!-- Is the action you are running threadsafe? If you don't know the answer to this, choose no. How many CPUs
-do you have? -->
-<!-- ... -->
