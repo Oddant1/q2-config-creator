@@ -58,10 +58,12 @@
   tabindex="0"
 >
   <input id="dropinput" bind:files onchange={(event) => fileChange(event)} type="file" accept=".toml"/>
-  <div class="text-xl text-gray-700 text-center">
-    <h1 class="mt-2.5 mb-1 text-4xl">Drag and drop or click here</h1>
-        To load an existing config from your computer. Please note we only guarantee we will be able to load
-        configs previously created by this webapp.
+  <div class="text-center text-gray-700">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#1a414c]">Upload</p>
+    <h1 class="mt-3 text-2xl font-semibold text-black sm:text-3xl">Drag and drop or click here</h1>
+    <p class="mt-3 text-sm text-gray-600">
+      Load a config created by this web app to prefill the form.
+    </p>
   </div>
 </div>
 
@@ -69,22 +71,27 @@
   @reference "tailwindcss";
 
   #dropzone {
-    box-shadow: rgb(153, 153, 153) 5px 5px 5px;
     @apply relative
-      border-4
+      rounded-2xl
+      border
       border-dashed
       border-gray-300
-      rounded-lg
       w-full
-      p-12
-      bg-gray-100
-      mb-4;
+      p-10
+      bg-white
+      shadow-sm
+      transition
+      duration-200
+      hover:border-blue-400
+      hover:bg-blue-50
+      hover:shadow-md;
   }
 
   #dropzone.isDragging {
     @apply border-solid
-      shadow-inner
-      font-bold;
+      border-blue-400
+      bg-blue-50
+      shadow-inner;
   }
 
   #dropinput {
