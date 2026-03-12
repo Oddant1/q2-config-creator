@@ -130,7 +130,7 @@
 				</p>
 
 				<!-- TODO: Disable this in some way while parsing a user input file (shouldn't take long) -->
-				<form class="grid gap-4" onsubmit={writeConfig}>
+				<form class="grid" onsubmit={writeConfig}>
 					{#key $formModel.configType}
 						<div>
 							<label class="text-sm font-bold text-gray-700" for="pcType">
