@@ -73,66 +73,6 @@
 	</div>
 </div>
 
-<!-- <div
-  id="dropzone"
-  class:isDragging
-  class:isSelected
-  ondragover={onDragOver}
-  ondragleave={onDragLeave}
-  ondrop={onDrop}
-  role="button"
-  tabindex="0"
->
-  <input id="dropinput" bind:files onchange={(event) => fileChange(event)} type="file" accept=".toml"/>
-  <div class="text-center text-gray-700">
-    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#1a414c]">Upload</p>
-    <h1 class="mt-3 text-2xl font-semibold text-black sm:text-3xl">Drag and drop or click here</h1>
-    <p class="mt-3 text-sm text-gray-600">
-      Load a config created by this web app to prefill the form.
-    </p>
-  </div>
-</div>
-
-<style lang="postcss">
-  @reference "tailwindcss";
-
-  #dropzone {
-    @apply relative
-      rounded-2xl
-      border
-      border-dashed
-      border-gray-300
-      w-full
-      p-10
-      bg-white
-      shadow-sm
-      transition
-      duration-200
-      hover:border-blue-400
-      hover:bg-blue-50
-      hover:shadow-md;
-  }
-
-  #dropzone.isDragging {
-    @apply border-solid
-      border-blue-400
-      bg-blue-50
-      shadow-inner;
-  }
-
-  #dropinput {
-    @apply cursor-pointer
-      opacity-0
-      absolute
-      top-0
-      right-0
-      bottom-0
-      left-0
-      w-full
-      h-full;
-  }
-</style> -->
-
 <style lang="postcss">
 	@reference "tailwindcss";
 
