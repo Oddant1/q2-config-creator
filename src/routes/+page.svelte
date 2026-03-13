@@ -93,12 +93,12 @@
 <header class="fixed top-0 right-0 left-0 z-10">
 	<NavBanner />
 </header>
-<div class="positioned-container min-h-screen overflow-auto bg-white text-black">
-	<div class="max-width flex items-center gap-3 pt-20">
+<div class="positioned-container min-h-screen overflow-auto bg-white text-black py-10">
+	<div class="max-width flex items-center gap-3 ">
 		<span class="mx-auto text-4xl font-bold text-black">QIIME 2 Parallel Config Creator</span>
 	</div>
 	<main class="max-width pt-10 pb-12">
-		<p class="pb-4">
+		<p class="pb-4 pt-4">
 			QIIME 2 features the ability to parallelize all QIIME 2 Pipelines using the PARSL parallel
 			scripting library under the hood. Running small workflows in parallel on a laptop requires
 			minimal configuration, and can be achieved by simply passing the --p-parallel flag to the
