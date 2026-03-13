@@ -93,8 +93,8 @@
 <header class="fixed top-0 right-0 left-0 z-10">
 	<NavBanner />
 </header>
-<div class="positioned-container min-h-screen overflow-auto bg-white text-black py-10">
-	<div class="max-width flex items-center">
+<div class="positioned-container">
+	<div class="flex items-center">
 		<span class="mx-auto text-4xl font-bold text-black">QIIME 2 Parallel Config Creator</span>
 	</div>
 	<main class="max-width pt-5 pb-5">

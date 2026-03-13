@@ -88,7 +88,6 @@
 @layer utilities {
 	.max-width {
 		max-width: calc(1110px + 17em);
-		margin: 0 auto;
-		font-size: initial;
+		@apply mx-auto;
 	}
 }
