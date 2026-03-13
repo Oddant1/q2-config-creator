@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
 	:root {
@@ -51,6 +51,16 @@
 }
 
 @layer components {
+	.positioned-container {
+		position: absolute;
+		top: 55px;
+		width: 100%;
+		height: calc(100% - 55px);
+		overflow: auto;
+		/* Prevent content from repositioning in Chromium when a scrollbar appears */
+		scrollbar-gutter: stable both-edges;
+	}
+
 	.roundInput {
 		@apply mt-auto mr-auto mb-4 h-9 rounded border border-solid border-gray-300 pl-2;
 	}
@@ -59,24 +69,17 @@
 		@apply rounded-md border border-gray-300 bg-white p-2 text-sm font-semibold text-gray-800;
 	}
 
-  .roundButton:hover {
-    @apply bg-gray-200;
-  }
+	.roundButton:hover {
+		@apply bg-gray-200;
+	}
 
-  .config-button {
-    @apply bg-[#1a414c]
-    text-white
-    rounded-md
-    py-1
-    pl-3 pr-2
-    text-sm
-    font-semibold
-    shadow-sm;
-  }
+	.config-button {
+		@apply rounded-md bg-[#1a414c] py-1 pr-2 pl-3 text-sm font-semibold text-white shadow-sm;
+	}
 
-  .config-button:hover {
-    @apply bg-blue-600;
-  }
+	.config-button:hover {
+		@apply bg-blue-600;
+	}
 
 	.header-link:link,
 	.header-link:visited {

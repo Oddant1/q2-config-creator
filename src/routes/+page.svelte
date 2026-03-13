@@ -90,11 +90,11 @@
 	}
 </script>
 
-<div class="min-h-screen bg-white text-black">
-	<header class="fixed top-0 right-0 left-0 z-10">
-		<NavBanner />
-	</header>
-	<div class="max-width flex h-full items-center gap-3 pt-20">
+<header class="fixed top-0 right-0 left-0 z-10">
+	<NavBanner />
+</header>
+<div class="positioned-container min-h-screen overflow-auto bg-white text-black">
+	<div class="max-width flex items-center gap-3 pt-20">
 		<span class="mx-auto text-4xl font-bold text-black">QIIME 2 Parallel Config Creator</span>
 	</div>
 	<main class="max-width pt-10 pb-12">
@@ -111,8 +111,8 @@
 			This webapp can help you create a file to pass into the --p-parallel-config parameter of a
 			QIIME 2 Pipeline you want to run in parallel on an HPC cluster using the slurm scheduler.
 			PARSL and thus QIIME 2 do support schedulers other than slurm, but this app currently only
-			supports creating slurm configs. More information about QIIME 2 parallel configuration may
-			be found
+			supports creating slurm configs. More information about QIIME 2 parallel configuration may be
+			found
 			<a
 				href="https://use.qiime2.org/en/stable/references/parallel-configuration.html"
 				target="_blank"
@@ -293,9 +293,7 @@
 					<div
 						class="flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 pt-4"
 					>
-						<p class="text-xs text-gray-500">
-							Your config will download as `parallelConfig.toml`.
-						</p>
+						<p class="text-xs text-gray-500">Your config will download as `parallelConfig.toml`.</p>
 						<button class="config-button" type="submit">Generate Config</button>
 					</div>
 				{/key}
