@@ -41,15 +41,6 @@
 	}
 }
 
-@layer utilities {
-	.max-width {
-		max-width: calc(1110px + 17em);
-		margin: 0 auto;
-		padding: 0 0.67em;
-		font-size: initial;
-	}
-}
-
 @layer components {
 	.positioned-container {
 		position: absolute;
@@ -91,5 +82,13 @@
 	.header-link:active {
 		color: white;
 		text-decoration: underline;
+	}
+}
+
+@layer utilities {
+	.max-width {
+		max-width: calc(1110px + 17em);
+		margin: 0 auto;
+		font-size: initial;
 	}
 }
