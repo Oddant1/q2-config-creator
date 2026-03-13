@@ -44,9 +44,10 @@
 @layer components {
 	.positioned-container {
 		position: absolute;
-		top: 55px;
+		top: 30px;
+		padding-top: 15px;
 		width: 100%;
-		height: calc(100% - 55px);
+		height: calc(100% - 30px);
 		overflow: auto;
 		/* Prevent content from repositioning in Chromium when a scrollbar appears */
 		scrollbar-gutter: stable both-edges;
