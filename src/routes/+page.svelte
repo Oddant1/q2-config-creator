@@ -117,7 +117,7 @@
 				href="https://use.qiime2.org/en/stable/references/parallel-configuration.html"
 				target="_blank"
 				rel="noreferrer">here</a
-			>.
+			>. You should read that documentation before using this app or trying to parallelize your workflows at all.
 		</p>
 
 		<DropZone />
