@@ -51,7 +51,7 @@
 		URL.revokeObjectURL(blobUrl);
 	}
 
-	function _createLocalConfigJson(jsonConfig) {
+	function _createLocalConfigJson(jsonConfig: any) {
 		jsonConfig.parsl['strategy'] = 'None';
 		const executor = jsonConfig.parsl.executors[0];
 		executor['class'] = formModel.formData.local.localExecutorType;
@@ -70,7 +70,7 @@
 		}
 	}
 
-	function _createSlurmConfigJson(jsonConfig) {
+	function _createSlurmConfigJson(jsonConfig: any) {
 		const executor = jsonConfig.parsl.executors[0];
 		executor['class'] = 'HighThroughputExecutor';
 		executor['cores_per_worker'] = formModel.formData.slurm.cpusPerWorker;
@@ -109,9 +109,9 @@
 		</p>
 		<p class="pb-4">
 			This webapp can help you create a file to pass into the --p-parallel-config parameter of a
-			QIIME 2 Pipeline you want to run in parallel on an HPC cluster using the slurm scheduler.
+			QIIME 2 Pipeline you want to run in parallel on an HPC cluster using the Slurm scheduler.
 			PARSL and thus QIIME 2 do support schedulers other than slurm, but this app currently only
-			supports creating slurm configs. More information about QIIME 2 parallel configuration may be
+			supports creating local and Slurm configs. More information about QIIME 2 parallel configuration may be
 			found
 			<a
 				href="https://use.qiime2.org/en/stable/references/parallel-configuration.html"
@@ -135,6 +135,11 @@
 						<label class="text-sm font-bold text-gray-700" for="pcType">
 							What type of computer are you using?
 						</label>
+						<p class="text-sm text-gray-500">
+							Currently, this config creator only supports local execution and Slurm.
+							Choose local if parallelizing on your own laptop/desktop/server.
+							Choose Slurm if parallelizing on an HPC using the Slurm scheduler.
+						</p>
 						<select
 							id="pcType"
 							name="pcType"
@@ -142,16 +147,18 @@
 							bind:value={formModel.configType}
 						>
 							<option value="local">local</option>
-							<option value="slurm">slurm</option>
+							<option value="slurm">Slurm</option>
 						</select>
 					</div>
 
 					{#if formModel.configType == 'local'}
 						<div>
 							<label class="text-sm font-bold text-gray-700" for="localExecutorType">
-								Is the action you are running threadsafe?
+								Is the Pipeline you are running threadsafe?
 							</label>
-							<p class="text-xs text-gray-500">If you are unsure, choose “No”.</p>
+							<p class="text-sm text-gray-500">
+								If you are unsure, choose “No”.
+							</p>
 							<select
 								id="localExecutorType"
 								name="localExecutorType"
@@ -166,7 +173,12 @@
 							<label class="text-sm font-bold text-gray-700" for="numTasks">
 								How many threads/processes would you like to run?
 							</label>
-							<p class="text-xs text-gray-500">More tasks require more memory.</p>
+							<p class="text-sm text-gray-500">
+								How many threads to run simultaneously if your task is threadsafe and how many processes to run simultaneously if it isn't.
+							</p>
+							<p class="text-sm text-gray-500">
+								NOTE: More threads/processes requires more RAM.
+							</p>
 							<input
 								id="numTasks"
 								class="roundInput w-full"
@@ -180,8 +192,13 @@
 					{:else}
 						<div>
 							<label class="text-sm font-bold text-gray-700" for="maxBlocks">
-								How many Slurm jobs do you want to submit?
+								How many blocks do you want to create?
 							</label>
+							<p class="text-sm text-gray-500">
+								This specifies the maximum number of blocks to be provisioned.
+								Each block is one Slurm job.
+								Each job requests the amount of resources you specify below for itself.
+							</p>
 							<input
 								id="maxBlocks"
 								class="roundInput w-full"
@@ -193,22 +210,12 @@
 							/>
 						</div>
 						<div>
-							<label class="text-sm font-bold text-gray-700" for="walltime">
-								Target walltime (HH:MM:SS)
-							</label>
-							<input
-								id="walltime"
-								class="roundInput w-full"
-								bind:value={formModel.formData.slurm.walltime}
-								pattern="\d*:\d\d:\d\d"
-								placeholder="HH:MM:SS"
-								required
-							/>
-						</div>
-						<div>
 							<label class="text-sm font-bold text-gray-700" for="nodesPerBlock">
-								How many nodes per Slurm job?
+								How many nodes per block?
 							</label>
+							<p class="text-sm text-gray-500">
+								This specifies the number of compute nodes each Slurm job will request.
+							</p>
 							<input
 								id="nodesPerBlock"
 								class="roundInput w-full"
@@ -220,23 +227,12 @@
 							/>
 						</div>
 						<div>
-							<label class="text-sm font-bold text-gray-700" for="workerPerNode">
-								How many tasks per node?
-							</label>
-							<input
-								id="workerPerNode"
-								class="roundInput w-full"
-								bind:value={formModel.formData.slurm.workersPerNode}
-								type="number"
-								min="1"
-								pattern="\d*"
-								required
-							/>
-						</div>
-						<div>
 							<label class="text-sm font-bold text-gray-700" for="cpusPerNode">
 								How many CPUs per node?
 							</label>
+							<p class="text-sm text-gray-500">
+								This specifies the number of CPUs the Slurm jobs will request per node.
+							</p>
 							<input
 								id="cpusPerNode"
 								class="roundInput w-full"
@@ -248,23 +244,12 @@
 							/>
 						</div>
 						<div>
-							<label class="text-sm font-bold text-gray-700" for="cpusPerWorker">
-								How many CPUs per task?
-							</label>
-							<input
-								id="cpusPerWorker"
-								class="roundInput w-full"
-								bind:value={formModel.formData.slurm.cpusPerWorker}
-								type="number"
-								min="1"
-								pattern="\d*"
-								required
-							/>
-						</div>
-						<div>
 							<label class="text-sm font-bold text-gray-700" for="memPerNode">
 								How much RAM per node (GB)?
 							</label>
+							<p class="text-sm text-gray-500">
+								This specifies the amount of RAM the Slurm jobs will request per node in Gigabytes.
+							</p>
 							<input
 								id="memPerNode"
 								class="roundInput w-full"
@@ -276,10 +261,65 @@
 							/>
 						</div>
 						<div>
+							<label class="text-sm font-bold text-gray-700" for="workerPerNode">
+								How many workers per node?
+							</label>
+							<p class="text-sm text-gray-500">
+								Each worker can handle one task, one QIIME 2 action, at a time.
+								The workers on a node share the resources provisioned on the node.
+							</p>
+							<input
+								id="workerPerNode"
+								class="roundInput w-full"
+								bind:value={formModel.formData.slurm.workersPerNode}
+								type="number"
+								min="1"
+								pattern="\d*"
+								required
+							/>
+						</div>
+						<div>
+							<label class="text-sm font-bold text-gray-700" for="cpusPerWorker">
+								How many CPUs per worker?
+							</label>
+							<p class="text-sm text-gray-500">
+								This specifies how many CPUs each worker on the node will have access to.
+								In general, this should be set to match CPUs per node / Workers per node
+							</p>
+							<input
+								id="cpusPerWorker"
+								class="roundInput w-full"
+								bind:value={formModel.formData.slurm.cpusPerWorker}
+								type="number"
+								min="1"
+								pattern="\d*"
+								required
+							/>
+						</div>
+						<div>
+							<label class="text-sm font-bold text-gray-700" for="walltime">
+								Target walltime (HH:MM:SS)
+							</label>
+							<p class="text-sm text-gray-500">
+								This specifies the walltime each Slurm job will request.
+							</p>
+							<input
+								id="walltime"
+								class="roundInput w-full"
+								bind:value={formModel.formData.slurm.walltime}
+								pattern="\d*:\d\d:\d\d"
+								placeholder="HH:MM:SS"
+								required
+							/>
+						</div>
+						<div>
 							<label class="text-sm font-bold text-gray-700" for="workerInit">
 								What commands activate QIIME 2?
 							</label>
-							<p class="text-xs text-gray-500">Separate multiple commands with `;`.</p>
+							<p class="text-sm text-gray-500">
+								This is the commands needed to load your QIIME 2 environment from a fresh terminal.
+								Separate multiple commands with `;`.
+							</p>
 							<input
 								id="workerInit"
 								class="roundInput w-full"
